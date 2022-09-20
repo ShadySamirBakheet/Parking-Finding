@@ -33,6 +33,7 @@
                 android:textColor="@color/txtColor1"
                 android:textSize="@dimen/_20ssp"/>
             <TextView
+                android:id="@+id/msg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/you_have_60_sec_to_scan_qr_code_at_the_parking"

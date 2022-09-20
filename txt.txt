@@ -1,0 +1,12 @@
+notify   		done
+address 		done
+back on all pages 	done 
+progress bar  		done	
+after add parking	done
+add delete parking	done
+cu -> kwd		
+log out			done
+after 60 cancel		
+cal time by min		done
+stop red line		done
+dele cancel		done

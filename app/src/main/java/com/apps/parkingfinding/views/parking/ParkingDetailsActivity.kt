@@ -3,6 +3,7 @@ package com.apps.parkingfinding.views.parking
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
@@ -16,7 +17,6 @@ import com.apps.parkingfinding.adapters.SlotAdapter
 import com.apps.parkingfinding.data.models.*
 import com.apps.parkingfinding.databinding.ActivityParkingDetailsBinding
 import com.apps.parkingfinding.utils.Constants
-import com.apps.parkingfinding.utils.Methods
 import com.apps.parkingfinding.viewmodel.NetworkViewModel
 import com.apps.parkingfinding.viewmodel.NotificationViewModel
 import com.apps.parkingfinding.viewmodel.ParkingViewModel
@@ -36,9 +36,12 @@ class ParkingDetailsActivity : AppCompatActivity() {
     private lateinit var parkingViewModel: ParkingViewModel
     private lateinit var networkViewModel: NetworkViewModel
     private lateinit var notificationViewModel: NotificationViewModel
+    val handler = Handler()
 
     var id = ""
     var uid = ""
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -128,6 +131,26 @@ class ParkingDetailsActivity : AppCompatActivity() {
             s += " $it ,"
         }
 
+        var timer = 60
+
+        handler.postDelayed(object : Runnable {
+            override fun run() {
+                timer--
+                dialogLayout.findViewById<TextView>(R.id.msg).text = "You have ${timer} Sec to scan QR code at the Parking"
+                if (timer>0){
+                    handler.postDelayed(this, 1000)
+                }else{
+                    if (alertDialog.isShowing){
+                        deleteParking()
+                        alertDialog.dismiss()
+                    }
+
+                }
+            }
+        }, 1000)
+
+
+
 
         dialogLayout.findViewById<TextView>(R.id.slots).text = s.substring(0, s.length - 1)
         dialogLayout.findViewById<TextView>(R.id.scan).setOnClickListener {
@@ -138,17 +161,22 @@ class ParkingDetailsActivity : AppCompatActivity() {
 
 
         dialogLayout.findViewById<TextView>(R.id.cancel).setOnClickListener {
-            if (Constants.selectParking!=null){
-                parkingViewModel.deleteBookParking(Constants.selectParking?.uid?:"",Constants.parkingBooked)
-                Constants.parkingBooked = null
-                Constants.selectParking = null
-                finish()
-                alertDialog.dismiss()
-            }
+           deleteParking()
+            alertDialog.dismiss()
         }
 
         alertDialog.show()
 
+    }
+
+    private fun deleteParking() {
+        if (Constants.selectParking!=null){
+            parkingViewModel.deleteBookParking(Constants.selectParking?.uid?:"",Constants.parkingBooked)
+            Constants.parkingBooked = null
+            Constants.selectParking = null
+            finish()
+
+        }
     }
 
     private fun getData() {
