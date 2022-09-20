@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="main">#0CBA70</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!--App Color-->
+    <color name="btnColor1">#0175FF</color>
+    <color name="btnColor2">#ffffff</color>
+    <color name="btnColor3">#FFB031</color>
+    <color name="btnColor4">#2F3133</color>
+    <color name="redColor">#E93535</color>
+    <color name="greyColor">#F7F7F7</color>
+    <color name="blueColor">#0175FF</color>
+
+    <color name="txtColor1">#282A3B</color>
+    <color name="txtColor2">#FFFFFFFF</color>
+    <color name="txtColor3">#FFB031</color>
+
+    <color name="background1">#fff</color>
+    <color name="background">#282A3B</color>
+
+    <color name="statusBarColor">#000</color>
+    <color name="blackColor">#000</color>
+
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true" >#ff5656</color>
+    <color name="inputColor">#4F5167</color>
+</resources>

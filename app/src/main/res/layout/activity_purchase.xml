@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.purchase.PurchaseActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/back_btn"
+                android:padding="@dimen/_6sdp"
+                android:src="@drawable/back" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/purchase"
+                android:textColor="@color/txtColor2"
+                android:textSize="@dimen/_18ssp" />
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/_8sdp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_120sdp"
+                android:layout_margin="@dimen/_40sdp"
+                android:src="@drawable/knet_logo" />
+
+            <LinearLayout
+                android:layout_margin="8dp"
+                android:paddingHorizontal="@dimen/_8sdp"
+                android:background="@drawable/input1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/item_spinner" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Expiration date"
+                android:textColor="@color/txtColor2"
+                android:textSize="@dimen/_13sdp"
+                android:paddingHorizontal="@dimen/_12sdp"/>
+
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:background="@drawable/input1"
+                    android:layout_margin="8dp"
+                    android:layout_weight="2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/item_spinner" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:background="@drawable/input1"
+                    android:layout_margin="8dp"
+                    android:layout_weight="2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/item_spinner" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input1"
+                android:layout_margin="@dimen/_8sdp"
+                android:paddingHorizontal="@dimen/_12sdp"
+                android:paddingVertical="@dimen/_8sdp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/total_amount"
+                    android:textColor="@color/txtColor2"
+                    android:textSize="@dimen/_18ssp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12 KWD"
+                    android:textColor="@color/txtColor3"
+                    android:textSize="@dimen/_18ssp" />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/btnStyleHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="@dimen/_40sdp"
+                android:gravity="center"
+                android:text="@string/confirm"
+                android:textSize="@dimen/_20ssp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>

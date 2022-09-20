@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_90sdp"
+    android:layout_height="@dimen/_90sdp"
+    android:layout_margin="@dimen/_4sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="@dimen/_5sdp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+>
+
+        <ImageView
+            android:id="@+id/itemImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/image" />
+
+        <ImageView
+            android:id="@+id/delItem"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginEnd="@dimen/_4sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:src="@drawable/delete" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

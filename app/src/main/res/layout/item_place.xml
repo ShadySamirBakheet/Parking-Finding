@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/_220sdp"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_6sdp"
+    app:cardBackgroundColor="@color/background1"
+    app:cardCornerRadius="@dimen/_10sdp"
+    app:cardElevation="0dp"
+    app:contentPadding="@dimen/_12sdp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:ignore="UseCompoundDrawables">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/usm_parking_space"
+                    android:textColor="@color/txtColor1"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2.5km - $3.00/h"
+                    android:textColor="@color/blueColor"
+                    android:textSize="@dimen/_12ssp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:contentDescription="@string/arrow_right"
+                android:src="@drawable/arrow_right"
+                app:tint="@color/blackColor" />
+
+            <ImageView
+                android:id="@+id/delete"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:padding="@dimen/_6sdp"
+                android:contentDescription="@string/arrow_right"
+                android:src="@drawable/ic_delete"
+                app:tint="@color/redColor" />
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/map"
+            android:layout_width="@dimen/_190sdp"
+            android:layout_height="@dimen/_70sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:contentDescription="Map"
+            android:scaleType="centerCrop"
+            android:src="@drawable/map" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

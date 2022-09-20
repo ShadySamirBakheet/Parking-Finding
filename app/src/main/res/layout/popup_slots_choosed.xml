@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/_50sdp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/_50sdp"
+            android:paddingHorizontal="@dimen/_20sdp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/slots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="05,06"
+                android:gravity="center"
+                android:textColor="@color/txtColor1"
+                android:textSize="@dimen/_40ssp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/has_been_booked"
+                android:gravity="center"
+                android:textColor="@color/txtColor1"
+                android:textSize="@dimen/_20ssp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/you_have_60_sec_to_scan_qr_code_at_the_parking"
+                android:gravity="center"
+                android:paddingVertical="@dimen/_16sdp"
+                android:textColor="@color/txtColor1"
+                android:textSize="@dimen/_18ssp"/>
+
+            <TextView
+                android:id="@+id/scan"
+                style="@style/btnStyleHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:text="Scan now"
+                android:layout_marginHorizontal="@dimen/_16sdp"
+                android:layout_marginVertical="@dimen/_8sdp"
+                android:textSize="@dimen/_20ssp" />
+
+
+            <TextView
+                android:id="@+id/cancel"
+                style="@style/btnStyleHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/addParking"
+                android:layout_marginHorizontal="@dimen/_16sdp"
+                android:layout_marginVertical="@dimen/_8sdp"
+                android:background="@drawable/btn_app3"
+                android:drawableStart="@drawable/ic_cancel"
+                android:gravity="center"
+                android:padding="@dimen/_8sdp"
+                android:text="@string/cancel_my_reservation"
+                android:textSize="@dimen/_18ssp" />
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
