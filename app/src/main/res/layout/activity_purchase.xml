@@ -53,19 +53,19 @@
                 android:layout_margin="@dimen/_40sdp"
                 android:src="@drawable/knet_logo" />
 
-            <LinearLayout
-                android:layout_margin="8dp"
-                android:paddingHorizontal="@dimen/_8sdp"
-                android:background="@drawable/input1"
+            <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:listitem="@layout/item_spinner" />
-
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_4sdp"
+                android:layout_marginVertical="@dimen/_8sdp"
+                android:background="@drawable/input1"
+                android:hint="Enter your bank account"
+                android:inputType="number"
+                android:padding="@dimen/_12sdp"
+                android:textColor="@color/txtColor2"
+                android:textColorHighlight="@color/txtColor2"
+                android:textColorHint="@color/txtColor2"
+                android:textSize="@dimen/_14ssp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -80,33 +80,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:background="@drawable/input1"
-                    android:layout_margin="8dp"
-                    android:layout_weight="2"
+                <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        tools:listitem="@layout/item_spinner" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:background="@drawable/input1"
-                    android:layout_margin="8dp"
                     android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_4sdp"
+                    android:layout_marginVertical="@dimen/_8sdp"
+                    android:background="@drawable/input1"
+                    android:hint="MM/YY"
+                    android:inputType="number"
+                    android:padding="@dimen/_12sdp"
+                    android:textColor="@color/txtColor2"
+                    android:textColorHighlight="@color/txtColor2"
+                    android:textColorHint="@color/txtColor2"
+                    android:textSize="@dimen/_14ssp" />
+
+                <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        tools:listitem="@layout/item_spinner" />
-
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:layout_marginHorizontal="@dimen/_4sdp"
+                    android:layout_marginVertical="@dimen/_8sdp"
+                    android:background="@drawable/input1"
+                    android:hint="CVV"
+                    android:inputType="number"
+                    android:padding="@dimen/_12sdp"
+                    android:textColor="@color/txtColor2"
+                    android:textColorHighlight="@color/txtColor2"
+                    android:textColorHint="@color/txtColor2"
+                    android:textSize="@dimen/_14ssp" />
 
             </LinearLayout>
 
@@ -127,15 +129,17 @@
                     android:textSize="@dimen/_18ssp" />
 
                 <TextView
+                    android:id="@+id/total"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12 KWD"
+                    android:text=" KWD"
                     android:textColor="@color/txtColor3"
                     android:textSize="@dimen/_18ssp" />
 
             </LinearLayout>
 
             <TextView
+                android:id="@+id/confirm"
                 style="@style/btnStyleHome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

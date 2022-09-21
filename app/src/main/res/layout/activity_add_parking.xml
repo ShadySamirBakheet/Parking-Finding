@@ -118,7 +118,7 @@
                 android:layout_marginVertical="@dimen/_8sdp"
                 android:background="@drawable/input1"
                 android:hint="@string/ex_2_5"
-                android:inputType="number"
+                android:inputType="d"
                 android:padding="@dimen/_12sdp"
                 android:textColor="@color/txtColor2"
                 android:textColorHighlight="@color/txtColor2"

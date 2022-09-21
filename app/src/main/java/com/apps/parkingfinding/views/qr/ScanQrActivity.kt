@@ -43,6 +43,7 @@ class ScanQrActivity : AppCompatActivity() {
     private var scannedValue = ""
 
     var isEnter = false
+    var hours = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -113,7 +114,7 @@ class ScanQrActivity : AppCompatActivity() {
                                 ),
                             )
                         }
-                        startActivity(Intent(this, PurchaseActivity::class.java))
+                        startActivity(Intent(this, PurchaseActivity::class.java).putExtra("hours",hours).putExtra("price",Constants.selectParking?.slotsPrice ?: 0))
                         Constants.parkingBooked = null
                         Constants.selectParking = null
                         binding.progress.visibility = View.GONE
@@ -212,11 +213,13 @@ class ScanQrActivity : AppCompatActivity() {
                                 Date().time - (Constants.parkingBooked?.data?.time ?: Date().time)
                             val seconds = diff / 1000
                             val minutes = seconds / 60
-                            var hours = minutes / 60
+                             hours = (minutes / 60).toInt()
 
-                            if (minutes % 60 > 30 && hours > 0) {
+                            val minInHour = minutes% 60
+
+                            if (minInHour > 30 && hours > 0) {
                                 hours++
-                            } else if (minutes % 60 > 0 && hours.toInt() == 0) {
+                            } else if (minInHour >= 0 && hours.toInt() == 0) {
                                 hours++
                             }
                             binding.timer.text = "$hours hours" //4h × 3$

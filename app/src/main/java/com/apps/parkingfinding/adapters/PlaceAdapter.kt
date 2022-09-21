@@ -28,7 +28,7 @@ import kotlin.math.sin
 class PlaceAdapter(private val context: Context?,val supportFragmentManager: FragmentManager) :
     RecyclerView.Adapter<PlaceAdapter.ViewHolder>() {
 
-    var data: List<Parking>? = null
+    var data: ArrayList<Parking>? = null
     var size = 0
     var longitude: Double = 0.0
     var latitude: Double = 0.0
@@ -69,6 +69,8 @@ class PlaceAdapter(private val context: Context?,val supportFragmentManager: Fra
                     Toast.makeText(context, "Delete", Toast.LENGTH_SHORT).show()
                     onItemDeleteListener.let {
                         if (it != null) {
+                            data?.remove(parking)
+                            notifyDataSetChanged()
                             it(parking)
                         }
                     }
@@ -103,7 +105,7 @@ class PlaceAdapter(private val context: Context?,val supportFragmentManager: Fra
         return size
     }
 
-    fun addData(data: List<Parking>?, longitude: Double, latitude: Double) {
+    fun addData(data: ArrayList<Parking>?, longitude: Double, latitude: Double) {
         this.data = data
         size = data?.size ?: 0
         this.longitude = longitude

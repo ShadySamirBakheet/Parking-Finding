@@ -4,9 +4,9 @@ back on all pages 	done
 progress bar  		done	
 after add parking	done
 add delete parking	done
-cu -> kwd		
+cu -> kwd		done
 log out			done
-after 60 cancel		
+after 60 cancel		done
 cal time by min		done
 stop red line		done
 dele cancel		done
