@@ -186,6 +186,7 @@ class ScanQrActivity : AppCompatActivity() {
         }
 
         binding.back.setOnClickListener {
+            deleteParking()
             finish()
         }
 
@@ -316,6 +317,7 @@ class ScanQrActivity : AppCompatActivity() {
         deleteParking()
         super.onBackPressed()
     }
+
 
 
     private fun deleteParking() {

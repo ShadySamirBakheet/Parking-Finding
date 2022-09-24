@@ -3,6 +3,7 @@ package com.apps.parkingfinding.views.parking
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -118,6 +119,7 @@ class AddParkingActivity : AppCompatActivity() {
                     locationName = it
                     val locationAdapter = LocationAdapter(this@AddParkingActivity, it)
                     locationAdapter.setOnDeleteListener {
+                        binding.locationList.visibility = GONE
                         parkingViewModel.clearLocation()
                     }
                     binding.locationList.apply {

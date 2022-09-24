@@ -21,6 +21,7 @@ class LocationAdapter(private val context: Context?, val name: String) :
             text = name
             setOnClickListener {
                 onItemDeleteListener.let {
+
                     if (it != null) {
                         it()
                     }
