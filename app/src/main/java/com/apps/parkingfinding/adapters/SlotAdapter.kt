@@ -86,4 +86,7 @@ class SlotAdapter(private val context: Context?) :
         }
         notifyDataSetChanged()
     }
+
+
+
 }

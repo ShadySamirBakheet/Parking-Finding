@@ -36,6 +36,7 @@ class FirebaseQueryLiveData : LiveData<DataSnapshot?> {
                 Log.d(LOG_TAG, dataSnapshot.key+" have "+ dataSnapshot.childrenCount.toString())
                 value = dataSnapshot
             }else{
+                value = null
                 Log.d(LOG_TAG, "Empty")
             }
         }

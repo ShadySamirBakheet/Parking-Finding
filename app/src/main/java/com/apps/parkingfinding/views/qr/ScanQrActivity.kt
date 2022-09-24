@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.animation.Animation
@@ -21,6 +22,7 @@ import com.apps.parkingfinding.utils.Constants
 import com.apps.parkingfinding.viewmodel.NetworkViewModel
 import com.apps.parkingfinding.viewmodel.NotificationViewModel
 import com.apps.parkingfinding.viewmodel.ParkingViewModel
+import com.apps.parkingfinding.views.home.HomeActivity
 import com.apps.parkingfinding.views.purchase.PurchaseActivity
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
@@ -34,6 +36,7 @@ class ScanQrActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityScanQrBinding
 
+
     private lateinit var parkingViewModel: ParkingViewModel
     private lateinit var networkViewModel: NetworkViewModel
     private lateinit var notificationViewModel: NotificationViewModel
@@ -44,6 +47,10 @@ class ScanQrActivity : AppCompatActivity() {
 
     var isEnter = false
     var hours = 0
+    var timer = 0
+
+    var handler: Handler? = Handler()
+    var stop = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -56,13 +63,33 @@ class ScanQrActivity : AppCompatActivity() {
         notificationViewModel = ViewModelProvider(this)[NotificationViewModel::class.java]
 
         isEnter = intent.getBooleanExtra("isEnter", false)
+
         binding.confirm.isEnabled = false
         if (isEnter) {
+            timer = intent.getIntExtra("timer", 0)
+            handler?.postDelayed(object : Runnable {
+                override fun run() {
+                    timer--
+                    binding.msg.text = "You have ${timer} Sec to scan QR code at the Parking"
+                    if (timer > 0 ) {
+                        if ( !stop){
+                            handler?.postDelayed(this, 1000)
+                        }
+                    } else {
+
+                        deleteParking()
+                        startActivity(Intent(this@ScanQrActivity, HomeActivity::class.java))
+                        finish()
+
+                    }
+                }
+            }, 1000)
             binding.timer.visibility = View.GONE
             binding.cal.visibility = View.GONE
             binding.msg.text = "You have 59 Sec to scan QR code at the Parking"
             binding.confirm.text = "Confirm"
             binding.confirm.setOnClickListener {
+                stop = true
                 Constants.parkingBooked?.status = BookedStatus.inParking
                 Constants.parkingBooked?.let { it1 ->
                     binding.progress.visibility = View.VISIBLE
@@ -79,6 +106,15 @@ class ScanQrActivity : AppCompatActivity() {
                                     "I am in Parking",
                                     System.currentTimeMillis().toString(),
                                     "Admin",
+                                    Date(),
+                                ),
+                            )
+                            notificationViewModel.setNotificationData(
+                                Notification(
+                                    "Admin",
+                                    "you are in Parking",
+                                    System.currentTimeMillis().toString(),
+                                    Constants.user?.id.toString(),
                                     Date(),
                                 ),
                             )
@@ -113,8 +149,22 @@ class ScanQrActivity : AppCompatActivity() {
                                     Date(),
                                 ),
                             )
+                            notificationViewModel.setNotificationData(
+                                Notification(
+                                    "Admin",
+                                    "you are leave Parking",
+                                    System.currentTimeMillis().toString(),
+                                    Constants.user?.id.toString(),
+                                    Date(),
+                                ),
+                            )
                         }
-                        startActivity(Intent(this, PurchaseActivity::class.java).putExtra("hours",hours).putExtra("price",Constants.selectParking?.slotsPrice ?: 0))
+                        startActivity(
+                            Intent(this, PurchaseActivity::class.java).putExtra(
+                                "hours",
+                                hours
+                            ).putExtra("price", Constants.selectParking?.slotsPrice ?: 0)
+                        )
                         Constants.parkingBooked = null
                         Constants.selectParking = null
                         binding.progress.visibility = View.GONE
@@ -199,6 +249,7 @@ class ScanQrActivity : AppCompatActivity() {
 
                     //Don't forget to add this line printing value or finishing activity must run on main thread
                     runOnUiThread {
+                        stop = true
                         binding.barcodeLine.clearAnimation()
                         cameraSource.stop()
 //                        Toast.makeText(
@@ -213,9 +264,9 @@ class ScanQrActivity : AppCompatActivity() {
                                 Date().time - (Constants.parkingBooked?.data?.time ?: Date().time)
                             val seconds = diff / 1000
                             val minutes = seconds / 60
-                             hours = (minutes / 60).toInt()
+                            hours = (minutes / 60).toInt()
 
-                            val minInHour = minutes% 60
+                            val minInHour = minutes % 60
 
                             if (minInHour > 30 && hours > 0) {
                                 hours++
@@ -258,6 +309,43 @@ class ScanQrActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(applicationContext, "Permission Denied", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        deleteParking()
+        super.onBackPressed()
+    }
+
+
+    private fun deleteParking() {
+        if (Constants.selectParking != null) {
+            parkingViewModel.deleteBookParking(
+                Constants.selectParking?.uid ?: "",
+                Constants.parkingBooked
+            )
+            notificationViewModel.setNotificationData(
+                Notification(
+                    Constants.user?.name.toString(),
+                    "I am delete book Parking",
+                    System.currentTimeMillis().toString(),
+                    "Admin",
+                    Date(),
+                ),
+            )
+            notificationViewModel.setNotificationData(
+                Notification(
+                    "Admin",
+                    "you are delete book Parking",
+                    System.currentTimeMillis().toString(),
+                    Constants.user?.id.toString(),
+                    Date(),
+                ),
+            )
+            Constants.parkingBooked = null
+            Constants.selectParking = null
+            finish()
+
         }
     }
 

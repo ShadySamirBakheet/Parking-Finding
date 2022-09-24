@@ -51,6 +51,7 @@ class NotificationAdapter (private val context: Context?) :
     fun addData(list: ArrayList<Notification>) {
         data = list
         size = data.size
+        data.reverse()
         notifyDataSetChanged()
     }
 }

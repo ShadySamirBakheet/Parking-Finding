@@ -20,6 +20,7 @@ import com.apps.parkingfinding.data.models.Parking
 import com.apps.parkingfinding.data.models.ParkingBooked
 import com.apps.parkingfinding.databinding.ActivityHomeBinding
 import com.apps.parkingfinding.utils.Constants
+import com.apps.parkingfinding.utils.Constants.isAdmin
 import com.apps.parkingfinding.utils.Methods
 import com.apps.parkingfinding.viewmodel.NetworkViewModel
 import com.apps.parkingfinding.viewmodel.NotificationViewModel
@@ -31,8 +32,6 @@ import com.apps.parkingfinding.views.qr.ScanQrActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
-import java.util.*
-import kotlin.collections.ArrayList
 
 class HomeActivity : AppCompatActivity() {
 
@@ -44,6 +43,8 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var parkingViewModel: ParkingViewModel
     private lateinit var networkViewModel: NetworkViewModel
     private lateinit var notificationViewModel: NotificationViewModel
+
+    var isSelected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -57,9 +58,9 @@ class HomeActivity : AppCompatActivity() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        binding.logout.setOnClickListener { 
+        binding.logout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            startActivity(Intent(this,MainActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
 
@@ -72,16 +73,14 @@ class HomeActivity : AppCompatActivity() {
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
+                this, arrayOf(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_NETWORK_STATE,
                     Manifest.permission.CAMERA,
-                ),
-                1
+                ), 1
             )
 
         }
@@ -102,10 +101,15 @@ class HomeActivity : AppCompatActivity() {
 
             binding.place.text = "Your Garage"
         } else {
+            val transportationAdapter = TransportationAdapter(this@HomeActivity)
             binding.transportationList.apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = TransportationAdapter(this@HomeActivity)
+                adapter = transportationAdapter
+            }
+
+            transportationAdapter.setOnSaveListener {
+                isSelected = true
             }
 
             binding.place.text = "Recent place"
@@ -116,11 +120,16 @@ class HomeActivity : AppCompatActivity() {
         }
         placeAdapter = PlaceAdapter(this@HomeActivity, supportFragmentManager)
         placeAdapter.setOnClickListener { id, uid ->
-            startActivity(
-                Intent(this, ParkingDetailsActivity::class.java)
-                    .putExtra("id", id)
-                    .putExtra("uid", uid)
-            )
+            if (isSelected || isAdmin) {
+                startActivity(
+                    Intent(this, ParkingDetailsActivity::class.java).putExtra("id", id)
+                        .putExtra("uid", uid)
+                )
+            } else {
+                Toast.makeText(this, "Please choose your transportatioin", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
         }
         placeAdapter.setOnDeleteListener {
             showDialogFun(it)
@@ -131,8 +140,7 @@ class HomeActivity : AppCompatActivity() {
             adapter = placeAdapter
         }
 
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 if (location != null) {
                     binding.address.text =
                         Methods.getAddress(this, location.latitude, location.longitude)!!
@@ -147,7 +155,7 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, NotificationActivity::class.java))
         }
 
-            binding.scan.visibility = View.GONE
+        binding.scan.visibility = View.GONE
 
 
 
@@ -160,12 +168,10 @@ class HomeActivity : AppCompatActivity() {
 
     private fun getNoty() {
         var uid = ""
-                if (Constants.isAdmin)
-                    uid = "Admin"
-                if (!Constants.isAdmin)
-                    uid = FirebaseAuth.getInstance().uid?:""
-        notificationViewModel.getNotificationData(uid).observe(this){
-            binding.count.text = (it?.children?.count()?:0).toString()
+        if (Constants.isAdmin) uid = "Admin"
+        if (!Constants.isAdmin) uid = FirebaseAuth.getInstance().uid ?: ""
+        notificationViewModel.getNotificationData(uid).observe(this) {
+            binding.count.text = (it?.children?.count() ?: 0).toString()
         }
     }
 
@@ -179,18 +185,19 @@ class HomeActivity : AppCompatActivity() {
 
                     it?.children?.forEach { dataSnapshot ->
                         dataSnapshot.children.forEach { parking ->
-                           val parkingItem =  parking.getValue(Parking::class.java)
+                            val parkingItem = parking.getValue(Parking::class.java)
                             if (parkingItem != null) {
                                 list.add(parkingItem)
-                                parking?.  child("booked")?.children?.forEach { book ->
+                                parking?.child("booked")?.children?.forEach { book ->
                                     book.children.forEach { book2 ->
-                                        val parkingBooked = book2.getValue(ParkingBooked::class.java)
+                                        val parkingBooked =
+                                            book2.getValue(ParkingBooked::class.java)
 
-                                        if (parkingBooked?.userId == FirebaseAuth.getInstance().currentUser?.uid && parkingBooked?.status != BookedStatus.finishParking){
+                                        if (parkingBooked?.userId == FirebaseAuth.getInstance().currentUser?.uid && parkingBooked?.status != BookedStatus.finishParking) {
                                             Constants.parkingBooked = parkingBooked
                                             Constants.selectParking = parkingItem
                                             binding.scan.visibility = View.VISIBLE
-                                        }else{
+                                        } else {
                                             binding.scan.visibility = View.GONE
                                         }
 
@@ -202,7 +209,13 @@ class HomeActivity : AppCompatActivity() {
 
                     }
                     binding.progress.visibility = View.GONE
-                    placeAdapter.addData(list, latitude, longitude,)
+                    if (list.isNotEmpty()){
+                        placeAdapter.addData(list, latitude, longitude)
+                        binding.placesList.visibility=View.VISIBLE
+                    }
+                    else{
+                        binding.placesList.visibility=View.GONE
+                    }
                 }
             }
         }
@@ -211,8 +224,7 @@ class HomeActivity : AppCompatActivity() {
     private fun showDialogFun(parking: Parking) {
         val builder = AlertDialog.Builder(this)
 
-        builder.setTitle("Delete Parking")
-            .setMessage("Are you want to Delete ${parking.name}")
+        builder.setTitle("Delete Parking").setMessage("Are you want to Delete ${parking.name}")
             .setPositiveButton("Ok") { dialogInterface, _ ->
                 binding.progress.visibility = View.VISIBLE
                 parkingViewModel.deleteParking(parking).addOnCanceledListener {
@@ -220,32 +232,26 @@ class HomeActivity : AppCompatActivity() {
                     binding.progress.visibility = View.GONE
                     dialogInterface.dismiss()
                 }
-            }
-            .setNegativeButton("Cancel") { dialogInterface, _ ->
+            }.setNegativeButton("Cancel") { dialogInterface, _ ->
                 dialogInterface.dismiss()
             }
         builder.create().show()
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                this, Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                this, Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             return
         }
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 if (location != null) {
                     binding.address.text =
                         Methods.getAddress(this, location.latitude, location.longitude)!!

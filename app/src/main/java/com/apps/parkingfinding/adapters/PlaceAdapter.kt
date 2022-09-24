@@ -69,7 +69,7 @@ class PlaceAdapter(private val context: Context?,val supportFragmentManager: Fra
                     Toast.makeText(context, "Delete", Toast.LENGTH_SHORT).show()
                     onItemDeleteListener.let {
                         if (it != null) {
-                            data?.remove(parking)
+                         //   data?.remove(parking)
                             notifyDataSetChanged()
                             it(parking)
                         }

@@ -64,9 +64,9 @@ class SignInActivity : AppCompatActivity() {
     private fun signAdmin() {
         val userEmail = binding.email.text.toString().trim()
         val password = binding.password.text.toString().trim()
-        binding.progress.visibility = View.VISIBLE
 
         if (userEmail.isNotEmpty() && password.isNotEmpty() && userEmail.lowercase(Locale.getDefault()) == "admin@admin.com" && password == "adminadmin") {
+            binding.progress.visibility = View.VISIBLE
             FirebaseAuth.getInstance()
                 .signInWithEmailAndPassword(userEmail, password)
                 .addOnSuccessListener {
@@ -79,6 +79,8 @@ class SignInActivity : AppCompatActivity() {
                         "Error Data or Not Found User ${it.message}",
                         Toast.LENGTH_SHORT
                     ).show()
+
+                    Log.e("firebase","Error Data or Not Found User ${it.message}")
                 }
 
         } else {

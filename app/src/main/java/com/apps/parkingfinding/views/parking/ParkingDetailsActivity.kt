@@ -17,6 +17,7 @@ import com.apps.parkingfinding.adapters.SlotAdapter
 import com.apps.parkingfinding.data.models.*
 import com.apps.parkingfinding.databinding.ActivityParkingDetailsBinding
 import com.apps.parkingfinding.utils.Constants
+import com.apps.parkingfinding.utils.Constants.isAdmin
 import com.apps.parkingfinding.viewmodel.NetworkViewModel
 import com.apps.parkingfinding.viewmodel.NotificationViewModel
 import com.apps.parkingfinding.viewmodel.ParkingViewModel
@@ -40,7 +41,6 @@ class ParkingDetailsActivity : AppCompatActivity() {
 
     var id = ""
     var uid = ""
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +75,7 @@ class ParkingDetailsActivity : AppCompatActivity() {
         binding.back.setOnClickListener {
             finish()
         }
-        if (Constants.isAdmin) {
+        if (isAdmin) {
             binding.confirm.visibility = View.GONE
         } else {
             binding.confirm.visibility = View.VISIBLE
@@ -91,22 +91,34 @@ class ParkingDetailsActivity : AppCompatActivity() {
         var num = slotAdapter.reserveds.size
         val parkingBooked = ParkingBooked(
             System.currentTimeMillis().toString(),
-            id, FirebaseAuth.getInstance().currentUser?.uid, Date(), num
+            id,
+            FirebaseAuth.getInstance().currentUser?.uid,
+            Date(),
+            num
         )
         if (num > 0) {
             binding.progress.visibility = View.VISIBLE
 
             parkingViewModel.bookParking(uid, parkingBooked).addOnCompleteListener {
                 if (it.isSuccessful) {
-                        notificationViewModel.setNotificationData(
-                            Notification(
-                                Constants.user?.name.toString(),
-                                "I am leave Parking",
-                                System.currentTimeMillis().toString(),
-                                "Admin",
-                                Date(),
-                            ),
-                        )
+                    notificationViewModel.setNotificationData(
+                        Notification(
+                            Constants.user?.name.toString(),
+                            "I am book Parking",
+                            System.currentTimeMillis().toString(),
+                            "Admin",
+                            Date(),
+                        ),
+                    )
+                    notificationViewModel.setNotificationData(
+                        Notification(
+                            "Admin",
+                            "you are book Parking",
+                            System.currentTimeMillis().toString(),
+                            Constants.user?.id.toString(),
+                            Date(),
+                        ),
+                    )
                     binding.progress.visibility = View.GONE
                     confirmDialog()
                 }
@@ -117,15 +129,13 @@ class ParkingDetailsActivity : AppCompatActivity() {
     }
 
     private fun confirmDialog() {
-        val alertDialogBuilder = AlertDialog.Builder(this,R.style.MyDialogTheme)
+        val alertDialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
         val alertDialog = alertDialogBuilder.create()
         val inflater = LayoutInflater.from(this)
         val dialogLayout = inflater.inflate(
             R.layout.popup_slots_choosed, null
         )
-
         alertDialog.setView(dialogLayout)
-
         var s = ""
         slotAdapter.reserveds.forEach {
             s += " $it ,"
@@ -136,11 +146,12 @@ class ParkingDetailsActivity : AppCompatActivity() {
         handler.postDelayed(object : Runnable {
             override fun run() {
                 timer--
-                dialogLayout.findViewById<TextView>(R.id.msg).text = "You have ${timer} Sec to scan QR code at the Parking"
-                if (timer>0){
+                dialogLayout.findViewById<TextView>(R.id.msg).text =
+                    "You have ${timer} Sec to scan QR code at the Parking"
+                if (timer > 0) {
                     handler.postDelayed(this, 1000)
-                }else{
-                    if (alertDialog.isShowing){
+                } else {
+                    if (alertDialog.isShowing) {
                         deleteParking()
                         alertDialog.dismiss()
                     }
@@ -149,19 +160,18 @@ class ParkingDetailsActivity : AppCompatActivity() {
             }
         }, 1000)
 
-
-
-
         dialogLayout.findViewById<TextView>(R.id.slots).text = s.substring(0, s.length - 1)
         dialogLayout.findViewById<TextView>(R.id.scan).setOnClickListener {
-            startActivity(Intent(this, ScanQrActivity::class.java).putExtra("isEnter",true))
+            startActivity(
+                Intent(this, ScanQrActivity::class.java).putExtra("isEnter", true)
+                    .putExtra("timer", timer)
+            )
             finish()
             alertDialog.dismiss()
         }
 
-
         dialogLayout.findViewById<TextView>(R.id.cancel).setOnClickListener {
-           deleteParking()
+            deleteParking()
             alertDialog.dismiss()
         }
 
@@ -170,8 +180,29 @@ class ParkingDetailsActivity : AppCompatActivity() {
     }
 
     private fun deleteParking() {
-        if (Constants.selectParking!=null){
-            parkingViewModel.deleteBookParking(Constants.selectParking?.uid?:"",Constants.parkingBooked)
+        if (Constants.selectParking != null) {
+            parkingViewModel.deleteBookParking(
+                Constants.selectParking?.uid ?: "",
+                Constants.parkingBooked
+            )
+            notificationViewModel.setNotificationData(
+                Notification(
+                    Constants.user?.name.toString(),
+                    "I am delete book Parking",
+                    System.currentTimeMillis().toString(),
+                    "Admin",
+                    Date(),
+                ),
+            )
+            notificationViewModel.setNotificationData(
+                Notification(
+                    "Admin",
+                    "you are delete book Parking",
+                    System.currentTimeMillis().toString(),
+                    Constants.user?.id.toString(),
+                    Date(),
+                ),
+            )
             Constants.parkingBooked = null
             Constants.selectParking = null
             finish()
@@ -188,10 +219,15 @@ class ParkingDetailsActivity : AppCompatActivity() {
 
                     binding.location.setOnClickListener {
                         parkingViewModel.selLocation(
-                            LatLng(parking?.locationLat?:0.0,parking?.locationLng?:0.0),
-                           parking?.locationName?:""
+                            LatLng(parking?.locationLat ?: 0.0, parking?.locationLng ?: 0.0),
+                            parking?.locationName ?: ""
                         )
-                        startActivity(Intent(this, SelectLocationActivity::class.java).putExtra("isView",true))
+                        startActivity(
+                            Intent(
+                                this,
+                                SelectLocationActivity::class.java
+                            ).putExtra("isView", true)
+                        )
                     }
                     val list = ArrayList<ParkingImage>()
                     it?.child("images")?.children?.forEach { image ->
@@ -202,19 +238,36 @@ class ParkingDetailsActivity : AppCompatActivity() {
                     it?.child("booked")?.children?.forEach { book ->
                         book.children.forEach { book2 ->
                             val parkingBooked = book2.getValue(ParkingBooked::class.java)
-                            if (parkingBooked?.data?.day != Date().day
-                            ) {
+                            if (parkingBooked?.data?.day != Date().day) {
                                 /*
                                 * || (parkingBooked?.data?.hours != Date().hours && (parkingBooked?.data?.minutes
                                     ?: 0) > 40 && (parkingBooked.status ?: 0) > 1)*/
 
                                 parkingViewModel.deleteBookParking(uid, parkingBooked)
+                                notificationViewModel.setNotificationData(
+                                    Notification(
+                                        Constants.user?.name.toString(),
+                                        "I am delete book Parking",
+                                        System.currentTimeMillis().toString(),
+                                        "Admin",
+                                        Date(),
+                                    ),
+                                )
+                                notificationViewModel.setNotificationData(
+                                    Notification(
+                                        "Admin",
+                                        "you are delete book Parking",
+                                        System.currentTimeMillis().toString(),
+                                        Constants.user?.id.toString(),
+                                        Date(),
+                                    ),
+                                )
                             } else {
-                                if (parkingBooked.userId == FirebaseAuth.getInstance().currentUser?.uid && parkingBooked.status != BookedStatus.finishParking){
-                                    me = parkingBooked.number?:0
+                                if (parkingBooked.userId == FirebaseAuth.getInstance().currentUser?.uid && parkingBooked.status != BookedStatus.finishParking) {
+                                    me = parkingBooked.number ?: 0
                                     Constants.parkingBooked = parkingBooked
                                     Constants.selectParking = parking
-                                }else {
+                                } else {
                                     reserved += (parkingBooked.number ?: 0)
                                 }
                             }
@@ -227,7 +280,7 @@ class ParkingDetailsActivity : AppCompatActivity() {
                         "${(parking?.slotsCount ?: 0) - (parking?.reserved ?: 0)} Slots available"
                     adapterSlider.addImages(list)
                     binding.progress.visibility = View.GONE
-                    slotAdapter.setSize(parking?.slotsCount, reserved,me)
+                    slotAdapter.setSize(parking?.slotsCount, reserved, me)
                 }
             }
         }

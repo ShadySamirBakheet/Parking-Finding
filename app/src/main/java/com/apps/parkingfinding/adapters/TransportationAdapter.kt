@@ -17,10 +17,10 @@ class TransportationAdapter(private val context: Context?) :
     RecyclerView.Adapter<TransportationAdapter.ViewHolder>() {
 
     var list = arrayListOf(
-Transportation("Car",R.drawable.car),
-Transportation("Bike",R.drawable.motorbike),
-Transportation("Truck",R.drawable.box_truck),
-Transportation("Bycicle",R.drawable.bycicle),
+        Transportation("Car", R.drawable.car),
+        Transportation("Bike", R.drawable.motorbike),
+        Transportation("Truck", R.drawable.box_truck),
+        Transportation("Bycicle", R.drawable.bycicle),
     )
 
     var selectedIndex = -1
@@ -37,21 +37,36 @@ Transportation("Bycicle",R.drawable.bycicle),
             name.text = item.name
             type.setImageResource(item.image)
             if (selectedIndex == position) {
-                container.setCardBackgroundColor(ContextCompat.getColor(context!!, R.color.blueColor))
-            }else{
-                container.setCardBackgroundColor(ContextCompat.getColor(context!!, R.color.greyColor))
+                container.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        context!!,
+                        R.color.blueColor
+                    )
+                )
+            } else {
+                container.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        context!!,
+                        R.color.greyColor
+                    )
+                )
             }
             container.setOnClickListener {
                 selectedIndex = position
+                onItemClickListener.let {
+                    if (it != null) {
+                        it()
+                    }
+                }
                 notifyDataSetChanged()
             }
         }
     }
 
 
-    private var onItemClickListener: ((String, String) -> Unit)? = null
+    private var onItemClickListener: (() -> Unit)? = null
 
-    fun setOnSaveListener(listener: (String, String) -> Unit) {
+    fun setOnSaveListener(listener: () -> Unit) {
         onItemClickListener = listener
     }
 
