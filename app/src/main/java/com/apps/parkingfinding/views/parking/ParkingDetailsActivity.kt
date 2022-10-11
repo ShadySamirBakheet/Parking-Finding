@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ParkingDetailsActivity : AppCompatActivity() {
 
@@ -88,15 +89,20 @@ class ParkingDetailsActivity : AppCompatActivity() {
     }
 
     private fun saveSlotsSelect() {
-        var num = slotAdapter.reserveds.size
+        var clean = 0
+        if ( binding.clean.isChecked){
+            clean = 1
+        }
+        val  num = slotAdapter.reserveds
         val parkingBooked = ParkingBooked(
             System.currentTimeMillis().toString(),
             id,
             FirebaseAuth.getInstance().currentUser?.uid,
             Date(),
-            num
+            num,
+            isClean = clean,
         )
-        if (num > 0) {
+        if (num.size > 0) {
             binding.progress.visibility = View.VISIBLE
 
             parkingViewModel.bookParking(uid, parkingBooked).addOnCompleteListener {
@@ -119,12 +125,13 @@ class ParkingDetailsActivity : AppCompatActivity() {
                             Date(),
                         ),
                     )
+//                    Toast.makeText(this, "num $num", Toast.LENGTH_SHORT).show()
                     binding.progress.visibility = View.GONE
                     confirmDialog()
                 }
             }
         } else {
-            Toast.makeText(this, "choose Slots please", Toast.LENGTH_SHORT).show()
+          //  Toast.makeText(this, "choose Slots please", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -135,6 +142,7 @@ class ParkingDetailsActivity : AppCompatActivity() {
         val dialogLayout = inflater.inflate(
             R.layout.popup_slots_choosed, null
         )
+        var  dismiss = false
         alertDialog.setView(dialogLayout)
         var s = ""
         slotAdapter.reserveds.forEach {
@@ -155,7 +163,6 @@ class ParkingDetailsActivity : AppCompatActivity() {
                         deleteParking()
                         alertDialog.dismiss()
                     }
-
                 }
             }
         }, 1000)
@@ -167,16 +174,21 @@ class ParkingDetailsActivity : AppCompatActivity() {
                     .putExtra("timer", timer)
             )
             finish()
+            dismiss = true
             alertDialog.dismiss()
         }
-
         dialogLayout.findViewById<TextView>(R.id.cancel).setOnClickListener {
             deleteParking()
+            dismiss = true
             alertDialog.dismiss()
         }
 
+        alertDialog.setOnDismissListener {
+            if (!dismiss){
+                deleteParking()
+            }
+        }
         alertDialog.show()
-
     }
 
     private fun deleteParking() {
@@ -233,8 +245,8 @@ class ParkingDetailsActivity : AppCompatActivity() {
                     it?.child("images")?.children?.forEach { image ->
                         image.getValue(ParkingImage::class.java)?.let { it1 -> list.add(it1) }
                     }
-                    var reserved = 0
-                    var me = 0
+                    var reserved = ArrayList<Int>()
+                    var me = ArrayList<Int>()
                     it?.child("booked")?.children?.forEach { book ->
                         book.children.forEach { book2 ->
                             val parkingBooked = book2.getValue(ParkingBooked::class.java)
@@ -264,20 +276,20 @@ class ParkingDetailsActivity : AppCompatActivity() {
                                 )
                             } else {
                                 if (parkingBooked.userId == FirebaseAuth.getInstance().currentUser?.uid && parkingBooked.status != BookedStatus.finishParking) {
-                                    me = parkingBooked.number ?: 0
+                                    me = parkingBooked.number?: ArrayList()
                                     Constants.parkingBooked = parkingBooked
                                     Constants.selectParking = parking
                                 } else {
-                                    reserved += (parkingBooked.number ?: 0)
+                                    reserved.addAll(parkingBooked.number?:java.util.ArrayList())
                                 }
                             }
                             //  Toast.makeText(this, "$reserved", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    Toast.makeText(this, "$reserved $me", Toast.LENGTH_SHORT).show()
-                    parking?.reserved = reserved
+               //     Toast.makeText(this, "$reserved $me", Toast.LENGTH_SHORT).show()
+                   // parking?.reserved = reserved
                     binding.available.text =
-                        "${(parking?.slotsCount ?: 0) - (parking?.reserved ?: 0)} Slots available"
+                        "${(parking?.slotsCount ?: 0) - reserved.size} Slots available"
                     adapterSlider.addImages(list)
                     binding.progress.visibility = View.GONE
                     slotAdapter.setSize(parking?.slotsCount, reserved, me)

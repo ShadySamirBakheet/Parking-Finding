@@ -48,6 +48,7 @@ class ScanQrActivity : AppCompatActivity() {
     var isEnter = false
     var hours = 0
     var timer = 0
+    var clean:Double = 0.0
 
     var handler: Handler? = Handler()
     var stop = false
@@ -61,6 +62,14 @@ class ScanQrActivity : AppCompatActivity() {
         networkViewModel = ViewModelProvider(this)[NetworkViewModel::class.java]
         parkingViewModel = ViewModelProvider(this)[ParkingViewModel::class.java]
         notificationViewModel = ViewModelProvider(this)[NotificationViewModel::class.java]
+
+        if (Constants.parkingBooked?.isClean?: 0 >0){
+            binding.clean.visibility = View.VISIBLE
+            clean = 1.5
+        }else{
+            clean = 0.0
+            binding.clean.visibility = View.GONE
+        }
 
         isEnter = intent.getBooleanExtra("isEnter", false)
 
@@ -76,11 +85,9 @@ class ScanQrActivity : AppCompatActivity() {
                             handler?.postDelayed(this, 1000)
                         }
                     } else {
-
                         deleteParking()
                         startActivity(Intent(this@ScanQrActivity, HomeActivity::class.java))
                         finish()
-
                     }
                 }
             }, 1000)
@@ -135,6 +142,16 @@ class ScanQrActivity : AppCompatActivity() {
                 Constants.parkingBooked?.let { it1 ->
                     binding.progress.visibility = View.VISIBLE
 
+
+
+                    if (Constants.parkingBooked?.isClean?: 0 >0){
+                        binding.clean.visibility = View.VISIBLE
+                        clean = 1.5
+                    }else{
+                        clean = 0.0
+                        binding.clean.visibility = View.GONE
+                    }
+
                     parkingViewModel.bookParking(
                         Constants.selectParking?.uid.toString(),
                         it1
@@ -163,7 +180,8 @@ class ScanQrActivity : AppCompatActivity() {
                             Intent(this, PurchaseActivity::class.java).putExtra(
                                 "hours",
                                 hours
-                            ).putExtra("price", Constants.selectParking?.slotsPrice ?: 0)
+                            ).putExtra("price", Constants.selectParking?.slotsPrice ?: 0.0 )
+                            .putExtra("priceAll",(Constants.selectParking?.slotsPrice?:0.0)*hours.toDouble() +clean)
                         )
                         Constants.parkingBooked = null
                         Constants.selectParking = null

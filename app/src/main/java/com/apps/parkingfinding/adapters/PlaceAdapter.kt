@@ -48,6 +48,13 @@ class PlaceAdapter(private val context: Context?,val supportFragmentManager: Fra
                 delete.visibility = View.GONE
             }
             if (parking != null) {
+                map.setOnClickListener {
+                    onMapClickListener.let {
+                        if (it != null) {
+                            it(parking.locationName!!)
+                        }
+                    }
+                }
                 if (context != null) {
                     name.text = parking.name
                     price.text = "${
@@ -87,6 +94,12 @@ class PlaceAdapter(private val context: Context?,val supportFragmentManager: Fra
         onItemClickListener = listener
     }
 
+    private var onMapClickListener: ((String) -> Unit)? = null
+
+    fun setOnMapClickListener(listener: (String) -> Unit) {
+        onMapClickListener = listener
+    }
+
     private var onItemDeleteListener: ((Parking) -> Unit)? = null
 
     fun setOnDeleteListener(listener: (Parking) -> Unit) {
@@ -95,6 +108,7 @@ class PlaceAdapter(private val context: Context?,val supportFragmentManager: Fra
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var delete: ImageView = itemView.findViewById(R.id.delete)
+        var map: ImageView = itemView.findViewById(R.id.map)
         var name: TextView = itemView.findViewById(R.id.name)
         var price: TextView = itemView.findViewById(R.id.price)
 

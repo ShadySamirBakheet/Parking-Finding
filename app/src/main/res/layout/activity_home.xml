@@ -60,7 +60,7 @@
                                 android:layout_height="@dimen/_15sdp"
                                 android:layout_marginEnd="@dimen/_8sdp"
                                 android:src="@drawable/location"
-                                android:contentDescription="@string/your_location" />
+                                android:contentDescription="" />
 
                             <TextView
                                 android:id="@+id/address"
@@ -68,7 +68,7 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/txtColor2"
                                 android:textSize="@dimen/_16ssp"
-                                android:text="@string/fakeAddress"/>
+                                android:text=""/>
                         </LinearLayout>
 
                     </LinearLayout>

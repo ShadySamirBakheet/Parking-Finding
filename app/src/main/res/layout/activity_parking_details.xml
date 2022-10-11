@@ -89,24 +89,41 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/info"
                 android:layout_below="@id/slider"
                 android:layout_width="@dimen/_260sdp"
+                android:gravity="center"
                 android:layout_centerHorizontal="true"
                 android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/location"
                     style="@style/btnStyleHome"
+                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:background="@drawable/btn_app4"
+                    android:visibility="gone"
+                    android:drawableEnd="@drawable/location"
                     android:gravity="center"
                     android:padding="@dimen/_8sdp"
-                    android:drawableEnd="@drawable/location"
-                    android:background="@drawable/btn_app4"
                     android:text="@string/location" />
+
+                <CheckBox
+                    android:id="@+id/clean"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/_8sdp"
+                    android:text="clean Your Car \n( 1.5 KWD )"
+                    android:textColorHint="@color/txtColor2"
+                    android:textColor="@color/txtColor2"/>
 
                 <TextView
                     android:id="@+id/available"
@@ -114,12 +131,15 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
+                    android:paddingHorizontal="@dimen/_8sdp"
                     android:alpha=".6"
+                    android:layout_weight="1"
+                    android:gravity="center"
                     android:text="7 Slots available"
                     android:textColor="@color/txtColor2"
                     android:textSize="@dimen/_15sdp" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/slotsList"

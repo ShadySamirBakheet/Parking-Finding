@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.ParkingFinding" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
+    <style name="Theme.ParkingFinding" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/main</item>
         <item name="colorOnSurface">@color/main</item>

@@ -50,11 +50,11 @@
             </LinearLayout>
 
             <ImageView
-                android:layout_width="@dimen/_12sdp"
-                android:layout_height="@dimen/_12sdp"
-                android:contentDescription="@string/arrow_right"
-                android:src="@drawable/arrow_right"
-                app:tint="@color/blackColor" />
+                android:id="@+id/map"
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
+                android:src="@drawable/place"
+                app:tint="@color/blueColor"/>
 
             <ImageView
                 android:id="@+id/delete"
@@ -69,7 +69,6 @@
 
 
         <ImageView
-            android:id="@+id/map"
             android:layout_width="@dimen/_190sdp"
             android:layout_height="@dimen/_70sdp"
             android:layout_marginTop="@dimen/_4sdp"

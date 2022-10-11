@@ -81,7 +81,6 @@ class AddParkingActivity : AppCompatActivity() {
                     System.currentTimeMillis().toString(),
                     name,
                     slots,
-                    0,
                     price,
                     location?.latitude!!,
                     location?.longitude!!,
@@ -151,8 +150,6 @@ class AddParkingActivity : AppCompatActivity() {
                 1 -> {
                     loadImageFun(data)
                 }
-
-
             }
         } else {
             Toast.makeText(this, "Error", Toast.LENGTH_LONG).show()

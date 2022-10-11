@@ -5,7 +5,9 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -85,7 +87,7 @@ class HomeActivity : AppCompatActivity() {
 
         }
 
-        if (Constants.isAdmin) {
+        if (isAdmin) {
             binding.icon.visibility = View.VISIBLE
             binding.titleHome.visibility = View.GONE
             binding.transportationList.visibility = View.GONE
@@ -131,6 +133,14 @@ class HomeActivity : AppCompatActivity() {
             }
 
         }
+
+        placeAdapter.setOnMapClickListener {
+            val link = "https://maps.google.com/?q=$it"
+            Toast.makeText(this, link, Toast.LENGTH_SHORT).show()
+            Log.e("link",link)
+            shareAppFun(link)
+        }
+
         placeAdapter.setOnDeleteListener {
             showDialogFun(it)
         }
@@ -168,11 +178,17 @@ class HomeActivity : AppCompatActivity() {
 
     private fun getNoty() {
         var uid = ""
-        if (Constants.isAdmin) uid = "Admin"
-        if (!Constants.isAdmin) uid = FirebaseAuth.getInstance().uid ?: ""
+        if (isAdmin) uid = "Admin"
+        if (!isAdmin) uid = FirebaseAuth.getInstance().uid ?: ""
         notificationViewModel.getNotificationData(uid).observe(this) {
             binding.count.text = (it?.children?.count() ?: 0).toString()
         }
+    }
+
+    private fun shareAppFun(link:String) {
+        val uri = Uri.parse(link)
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        startActivity(intent)
     }
 
     private fun getParking(latitude: Double, longitude: Double) {
