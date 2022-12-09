@@ -7,7 +7,6 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,7 +26,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ParkingDetailsActivity : AppCompatActivity() {
 
@@ -78,8 +76,13 @@ class ParkingDetailsActivity : AppCompatActivity() {
         }
         if (isAdmin) {
             binding.confirm.visibility = View.GONE
+            binding.edit.visibility = View.VISIBLE
+            binding.edit.setOnClickListener {
+               startActivity( Intent(this, AddParkingActivity::class.java).putExtra("isEdit", true))
+            }
         } else {
             binding.confirm.visibility = View.VISIBLE
+            binding.edit.visibility = View.GONE
             binding.confirm.setOnClickListener {
                 saveSlotsSelect()
             }
@@ -90,10 +93,10 @@ class ParkingDetailsActivity : AppCompatActivity() {
 
     private fun saveSlotsSelect() {
         var clean = 0
-        if ( binding.clean.isChecked){
+        if (binding.clean.isChecked) {
             clean = 1
         }
-        val  num = slotAdapter.reserveds
+        val num = slotAdapter.reserveds
         val parkingBooked = ParkingBooked(
             System.currentTimeMillis().toString(),
             id,
@@ -131,7 +134,7 @@ class ParkingDetailsActivity : AppCompatActivity() {
                 }
             }
         } else {
-          //  Toast.makeText(this, "choose Slots please", Toast.LENGTH_SHORT).show()
+            //  Toast.makeText(this, "choose Slots please", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -142,7 +145,7 @@ class ParkingDetailsActivity : AppCompatActivity() {
         val dialogLayout = inflater.inflate(
             R.layout.popup_slots_choosed, null
         )
-        var  dismiss = false
+        var dismiss = false
         alertDialog.setView(dialogLayout)
         var s = ""
         slotAdapter.reserveds.forEach {
@@ -184,7 +187,7 @@ class ParkingDetailsActivity : AppCompatActivity() {
         }
 
         alertDialog.setOnDismissListener {
-            if (!dismiss){
+            if (!dismiss) {
                 deleteParking()
             }
         }
@@ -228,7 +231,7 @@ class ParkingDetailsActivity : AppCompatActivity() {
             if (it) {
                 parkingViewModel.getSelectParking(id, uid).observe(this) {
                     val parking = it?.getValue(Parking::class.java)
-
+                    Constants.selectParking = parking
                     binding.location.setOnClickListener {
                         parkingViewModel.selLocation(
                             LatLng(parking?.locationLat ?: 0.0, parking?.locationLng ?: 0.0),
@@ -276,21 +279,22 @@ class ParkingDetailsActivity : AppCompatActivity() {
                                 )
                             } else {
                                 if (parkingBooked.userId == FirebaseAuth.getInstance().currentUser?.uid && parkingBooked.status != BookedStatus.finishParking) {
-                                    me = parkingBooked.number?: ArrayList()
+                                    me = parkingBooked.number ?: ArrayList()
                                     Constants.parkingBooked = parkingBooked
                                     Constants.selectParking = parking
                                 } else {
-                                    reserved.addAll(parkingBooked.number?:java.util.ArrayList())
+                                    reserved.addAll(parkingBooked.number ?: java.util.ArrayList())
                                 }
                             }
                             //  Toast.makeText(this, "$reserved", Toast.LENGTH_SHORT).show()
                         }
                     }
-               //     Toast.makeText(this, "$reserved $me", Toast.LENGTH_SHORT).show()
-                   // parking?.reserved = reserved
+                    //     Toast.makeText(this, "$reserved $me", Toast.LENGTH_SHORT).show()
+                    // parking?.reserved = reserved
                     binding.available.text =
                         "${(parking?.slotsCount ?: 0) - reserved.size} Slots available"
                     adapterSlider.addImages(list)
+                    Constants.selectParkingImages = list
                     binding.progress.visibility = View.GONE
                     slotAdapter.setSize(parking?.slotsCount, reserved, me)
                 }

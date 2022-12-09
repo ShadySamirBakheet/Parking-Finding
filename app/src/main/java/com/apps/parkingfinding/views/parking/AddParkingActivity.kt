@@ -1,6 +1,8 @@
 package com.apps.parkingfinding.views.parking
 
 import android.content.Intent
+import android.location.Location
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
@@ -12,6 +14,7 @@ import com.apps.parkingfinding.adapters.AddImageAdapter
 import com.apps.parkingfinding.adapters.LocationAdapter
 import com.apps.parkingfinding.data.models.Parking
 import com.apps.parkingfinding.databinding.ActivityAddParkingBinding
+import com.apps.parkingfinding.utils.Constants
 import com.apps.parkingfinding.utils.FileUtils
 import com.apps.parkingfinding.viewmodel.NetworkViewModel
 import com.apps.parkingfinding.viewmodel.ParkingViewModel
@@ -30,11 +33,15 @@ class AddParkingActivity : AppCompatActivity() {
     private var location: LatLng? = null
     private var locationName: String? = null
 
+    var isEdit = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         binding = ActivityAddParkingBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        isEdit = intent.getBooleanExtra("isEdit", false)
 
         networkViewModel = ViewModelProvider(this)[NetworkViewModel::class.java]
         parkingViewModel = ViewModelProvider(this)[ParkingViewModel::class.java]
@@ -42,6 +49,9 @@ class AddParkingActivity : AppCompatActivity() {
 
         addImageAdapter.setOnAddListener {
             loadImage()
+        }
+        addImageAdapter.setOnDeleteListener {
+            parkingViewModel.deleteImagParking(Constants.user?.id!!,it)
         }
 
         binding.confirm.setOnClickListener {
@@ -64,6 +74,16 @@ class AddParkingActivity : AppCompatActivity() {
         binding.addLocation.setOnClickListener {
             startActivity(Intent(this, SelectLocationActivity::class.java))
         }
+
+        if (isEdit) {
+            binding.parkName.setText(Constants.selectParking?.name)
+            binding.slots.setText(Constants.selectParking?.slotsCount.toString())
+            binding.price.setText(Constants.selectParking?.slotsPrice.toString())
+            location = LatLng(Constants.selectParking?.locationLat?:0.0,Constants.selectParking?.locationLng?:0.0)
+            locationName  = Constants.selectParking?.locationName
+            parkingViewModel.selLocation(location!!, locationName!!)
+            addImageAdapter.setDataFun(  Constants.selectParkingImages)
+        }
     }
 
     private fun saveParking() {
@@ -72,13 +92,26 @@ class AddParkingActivity : AppCompatActivity() {
             val slots = binding.slots.text.toString().trim().toInt()
             val price = binding.price.text.toString().trim().toDouble()
 
-            val images = addImageAdapter.data
+            val images = ArrayList<Uri>()
+
+            addImageAdapter.data.forEach {
+                if (it.id ==null){
+                    it.imageUri?.let { it1 -> images.add(it1) }
+                }
+            }
 
             if (name.isNotEmpty() && slots > 0 && price > 0 && location != null && images.isNotEmpty()) {
                 binding.progress.visibility = View.VISIBLE
+
+                var uid = FirebaseAuth.getInstance().currentUser?.uid
+                var id = System.currentTimeMillis().toString()
+                if (isEdit) {
+                    uid = Constants.selectParking?.uid
+                    id = Constants.selectParking?.id ?: ""
+                }
                 val parking = Parking(
-                    FirebaseAuth.getInstance().currentUser?.uid,
-                    System.currentTimeMillis().toString(),
+                    uid,
+                    id,
                     name,
                     slots,
                     price,

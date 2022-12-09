@@ -28,10 +28,10 @@ class SlotAdapter(private val context: Context?) :
         val num = position + 1
         holder.apply {
             if (reserved.contains(num)) {
-                itemImage.setImageResource(R.drawable.carg)
+                itemImage.setImageResource(R.drawable.carr)
             } else {
 
-                itemImage.setImageResource(R.drawable.carr)
+                itemImage.setImageResource(R.drawable.carg)
                 if (reserveds.contains(num)||me.contains(num)) {
                     itemImage.setImageResource(R.drawable.carb)
                 }

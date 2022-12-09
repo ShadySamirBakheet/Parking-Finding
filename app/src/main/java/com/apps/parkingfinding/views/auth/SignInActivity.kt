@@ -10,10 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.apps.parkingfinding.data.datasources.SharedStorage
 import com.apps.parkingfinding.data.models.User
 import com.apps.parkingfinding.databinding.ActivitySignInBinding
+import com.apps.parkingfinding.utils.Constants
 import com.apps.parkingfinding.utils.Constants.isAdmin
 import com.apps.parkingfinding.viewmodel.NetworkViewModel
 import com.apps.parkingfinding.viewmodel.UserViewModel
 import com.apps.parkingfinding.views.home.HomeActivity
+import com.apps.parkingfinding.views.home.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
@@ -58,6 +60,7 @@ class SignInActivity : AppCompatActivity() {
 
         binding.signUp.setOnClickListener {
             startActivity(Intent(this, SignUpActivity::class.java))
+            finish()
         }
     }
 
@@ -79,7 +82,6 @@ class SignInActivity : AppCompatActivity() {
                         "Error Data or Not Found User ${it.message}",
                         Toast.LENGTH_SHORT
                     ).show()
-
                     Log.e("firebase","Error Data or Not Found User ${it.message}")
                 }
 
@@ -103,33 +105,29 @@ class SignInActivity : AppCompatActivity() {
                     liveData.observe(this) { dataSnapshot ->
                         if (dataSnapshot != null) {
                             var user: User? = null
-
                             try {
                                 user = dataSnapshot.getValue(User::class.java)
-
                             } catch (e: Exception) {
                                 Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
                                 Log.e("this", e.message!!)
                             }
+                            Toast.makeText(
+                                this,
+                                " User is ${user?.name}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             if (user != null) {
                                 SharedStorage.saveLoginData(this, user)
-
+                                Constants.user =user
                                 startActivity(Intent(this, HomeActivity::class.java))
                                 finish()
-
-
                             } else {
-
                                 binding.progress.visibility = View.GONE
-
                                 Toast.makeText(this, "Error Data or Not Found", Toast.LENGTH_SHORT)
                                     .show()
                             }
                         }
-
-
                         binding.progress.visibility = View.GONE
-
                         binding.email.setText("")
                         binding.password.setText("")
                     }
@@ -146,6 +144,12 @@ class SignInActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Error Data", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onBackPressed() {
+        startActivity(Intent(this, MainActivity::class.java))
+
+        super.onBackPressed()
     }
 
 }

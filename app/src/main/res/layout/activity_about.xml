@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.about.AboutActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/back_btn"
+                android:padding="@dimen/_6sdp"
+                android:src="@drawable/back" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="About"
+                android:textColor="@color/txtColor2"
+                android:textSize="@dimen/_18ssp" />
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolBar">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/_16sdp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Parking App"
+            android:textColor="@color/txtColor2"
+            android:layout_margin="@dimen/_4sdp"
+            android:textSize="@dimen/_16ssp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Step 1 :- user will make a signup and then choose the nearest parking around him."
+            android:layout_margin="@dimen/_8sdp"
+            android:textColor="@color/txtColor2"
+            android:textSize="@dimen/_14ssp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Step 2:- After that will see the available positions in the parking, and the user can decide to book one or more places in the parking."
+            android:layout_margin="@dimen/_8sdp"
+            android:textColor="@color/txtColor2"
+            android:textSize="@dimen/_14ssp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Step 3- After that user had one minute to scan the QR code inside the parking, or his reservation would be canceled automatically."
+            android:layout_margin="@dimen/_8sdp"
+            android:textColor="@color/txtColor2"
+            android:textSize="@dimen/_14ssp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Step 4:- After scanning the QR code, the application locks the positions on the application and starts counting the parking time."
+            android:layout_marginHorizontal="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:textColor="@color/txtColor2"
+            android:textSize="@dimen/_14ssp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="When the user needs to go out, the user can see the parking location through google maps and reach his car. After that user scans the QR code again, and the balance will be received on the application and paid using KNET."
+            android:layout_marginHorizontal="@dimen/_8sdp"
+            android:textColor="@color/txtColor2"
+            android:textSize="@dimen/_14ssp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Step 5:- After payment user can go out of the parking, and booked places in the application will be available again."
+            android:layout_margin="@dimen/_8sdp"
+            android:textColor="@color/txtColor2"
+            android:textSize="@dimen/_14ssp" />
+
+    </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

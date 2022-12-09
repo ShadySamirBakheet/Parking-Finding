@@ -40,28 +40,34 @@ class SplashActivity : AppCompatActivity() {
             val currentUser = FirebaseAuth.getInstance().currentUser
             if (currentUser == null) {
                 startActivity(Intent(this, MainActivity::class.java))
+                finish()
             } else {
                 if (currentUser.email == "admin@admin.com") {
                     Constants.isAdmin = true
                     Constants.user = User(
                         currentUser.uid,"Admin",currentUser.email,"0",true
                     )
+                    startActivity(Intent(this, HomeActivity::class.java))
+                    finish()
                 } else {
                     val liveData = userViewModel.getUserData(currentUser.uid)
                     liveData.observe(this) { dataSnapshot ->
                         if (dataSnapshot != null) {
                             try {
                                 Constants.user = dataSnapshot.getValue(User::class.java)
+                                Log.d("TAG", "onCreate: ${Constants.user} ")
+                                startActivity(Intent(this, HomeActivity::class.java))
+                                finish()
                             } catch (e: Exception) {
                                 Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
                                 Log.e("this", e.message!!)
+                                startActivity(Intent(this, HomeActivity::class.java))
+                                finish()
                             }
                         }
                     }
                 }
-                startActivity(Intent(this, HomeActivity::class.java))
             }
-            finish()
         }, 3000)
     }
 }

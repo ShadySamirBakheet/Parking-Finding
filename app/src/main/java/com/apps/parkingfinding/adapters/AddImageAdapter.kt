@@ -9,12 +9,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.apps.parkingfinding.R
+import com.apps.parkingfinding.data.models.ParkingImage
+import com.bumptech.glide.Glide
 
 class AddImageAdapter(private val context: Context?) :
 
     RecyclerView.Adapter<AddImageAdapter.ViewHolder>() {
     private var size = 1
-    var data: ArrayList<Uri> = ArrayList()
+    var data: ArrayList<ParkingImage> = ArrayList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View =
             LayoutInflater.from(context).inflate(R.layout.item_add_image, parent, false)
@@ -23,7 +25,7 @@ class AddImageAdapter(private val context: Context?) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.apply {
-            if (position == size-1) {
+            if (position == size - 1) {
                 delItem.visibility = View.GONE
                 itemImage.setImageResource(R.drawable.image)
                 itemImage.setOnClickListener {
@@ -34,9 +36,24 @@ class AddImageAdapter(private val context: Context?) :
                     }
                 }
             } else {
+                if (data[position].id != null) {
+                    if (context != null) {
+                        Glide.with(context).load(data[position].image)
+                            .placeholder(R.drawable.image2)
+                            .into(itemImage)
+                    }
+                }else{
+                    itemImage.setImageURI(data[position].imageUri)
+                }
                 delItem.visibility = View.VISIBLE
-                itemImage.setImageURI(data[position ])
                 delItem.setOnClickListener {
+                    if (data[position].id != null) {
+                        onItemDeleteListener.let {
+                            if (it != null) {
+                                it(data[position])
+                            }
+                        }
+                    }
                     data.removeAt(position)
                     size--
                     notifyDataSetChanged()
@@ -52,6 +69,12 @@ class AddImageAdapter(private val context: Context?) :
         onItemAddListener = listener
     }
 
+    private var onItemDeleteListener: ((ParkingImage) -> Unit)? = null
+
+    fun setOnDeleteListener(listener: (ParkingImage) -> Unit) {
+        onItemDeleteListener = listener
+    }
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var delItem: ImageView = itemView.findViewById(R.id.delItem)
         var itemImage: ImageView = itemView.findViewById(R.id.itemImage)
@@ -62,8 +85,21 @@ class AddImageAdapter(private val context: Context?) :
     }
 
     fun setImageURI(uri: Uri) {
-         data.add(uri)
-        size = data.size+1
+        data.add(
+            ParkingImage(
+                imageUri = uri
+            )
+        )
+        size = data.size + 1
+        notifyDataSetChanged()
+    }
+
+    fun setDataFun(selectParkingImages: ArrayList<ParkingImage>?) {
+        selectParkingImages?.forEach {
+            data.add((it))
+        }
+        size = data.size + 1
         notifyDataSetChanged()
     }
 }
+

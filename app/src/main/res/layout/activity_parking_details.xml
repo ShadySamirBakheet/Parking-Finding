@@ -32,6 +32,20 @@
                 android:text="@string/parking_name"
                 android:textColor="@color/txtColor2"
                 android:textSize="@dimen/_18ssp" />
+
+
+            <ImageView
+                android:id="@+id/edit"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/back_btn"
+                android:padding="@dimen/_6sdp"
+                android:clickable="true"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:src="@drawable/edit" />
+
         </RelativeLayout>
 
     </androidx.appcompat.widget.Toolbar>

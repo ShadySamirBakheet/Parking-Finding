@@ -9,9 +9,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.apps.parkingfinding.data.datasources.SharedStorage
 import com.apps.parkingfinding.data.models.User
 import com.apps.parkingfinding.databinding.ActivitySignUpBinding
+import com.apps.parkingfinding.utils.Constants
 import com.apps.parkingfinding.viewmodel.NetworkViewModel
 import com.apps.parkingfinding.viewmodel.UserViewModel
 import com.apps.parkingfinding.views.home.HomeActivity
+import com.apps.parkingfinding.views.home.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 
 class SignUpActivity : AppCompatActivity() {
@@ -80,6 +82,7 @@ class SignUpActivity : AppCompatActivity() {
 
                 userViewModel.setUserData(user).addOnSuccessListener {
                     SharedStorage.saveLoginData(this,user)
+                    Constants.user =user
                     startActivity(Intent(this, HomeActivity::class.java))
                     finish()
                 }.addOnFailureListener{
@@ -101,4 +104,11 @@ class SignUpActivity : AppCompatActivity() {
             Toast.makeText(this, "Error Data Enter", Toast.LENGTH_SHORT).show()
         }
     }
+
+
+    override fun onBackPressed() {
+        startActivity(Intent(this, MainActivity::class.java))
+        super.onBackPressed()
+    }
+
 }

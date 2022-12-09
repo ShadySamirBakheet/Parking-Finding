@@ -110,6 +110,11 @@ class ParkingViewModel(application: Application) : AndroidViewModel(application)
             .removeValue()
 
     }
+    fun deleteImagParking(uid: String, parkingBooked: ParkingImage?): Task<Void> {
+        return parkingRef.child(uid + "/" + parkingBooked?.parkingId + "/images/" + parkingBooked?.id)
+            .removeValue()
+
+    }
 
     fun deleteParking(parking: Parking): Task<Void> {
         return parkingRef.child(parking.uid + "/" + parking.id).removeValue()

@@ -39,6 +39,19 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_weight="1">
+
+
+                        <TextView
+                            android:id="@+id/welcome"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/txtColor2"
+                            android:textSize="@dimen/_13ssp"
+                            android:drawableStart="@drawable/profile"
+                            android:layout_marginBottom="@dimen/_4sdp"
+                            android:text="Welcome Dear"/>
+
+
                         <TextView
                             android:id="@+id/title"
                             android:layout_width="match_parent"
@@ -73,55 +86,95 @@
 
                     </LinearLayout>
 
-                    <RelativeLayout
-                        android:id="@+id/notification"
-                        android:layout_width="@dimen/_40sdp"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginTop="@dimen/_4sdp"
-                        android:layout_height="@dimen/_40sdp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:orientation="vertical">
 
-                        <androidx.cardview.widget.CardView
-                            android:layout_alignParentEnd="true"
-                            android:layout_width="@dimen/_18sdp"
-                            android:layout_height="@dimen/_18sdp"
-                            app:cardCornerRadius="@dimen/_9sdp"
-                            app:cardElevation="5dp"
-                            app:cardBackgroundColor="@color/redColor">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
-                            <TextView
-                                android:id="@+id/count"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:textColor="@color/txtColor2"
-                                android:textSize="@dimen/_10ssp"
-                                android:textAlignment="center"
-                                android:gravity="center"
-                                android:text="0"/>
+                            <RelativeLayout
+                                android:id="@+id/notification"
+                                android:layout_width="@dimen/_40sdp"
+                                android:layout_marginStart="@dimen/_8sdp"
+                                android:layout_marginTop="@dimen/_4sdp"
+                                android:layout_height="@dimen/_40sdp">
 
-                        </androidx.cardview.widget.CardView>
+                                <androidx.cardview.widget.CardView
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_width="@dimen/_18sdp"
+                                    android:layout_height="@dimen/_18sdp"
+                                    app:cardCornerRadius="@dimen/_9sdp"
+                                    app:cardElevation="5dp"
+                                    app:cardBackgroundColor="@color/redColor">
+
+                                    <TextView
+                                        android:id="@+id/count"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:textColor="@color/txtColor2"
+                                        android:textSize="@dimen/_10ssp"
+                                        android:textAlignment="center"
+                                        android:gravity="center"
+                                        android:text="0"/>
+
+                                </androidx.cardview.widget.CardView>
 
 
-                        <ImageView
-                            android:layout_width="@dimen/_30sdp"
-                            android:layout_height="@dimen/_30sdp"
-                            android:layout_centerVertical="true"
-                            android:background="@drawable/back_btn"
-                            android:padding="@dimen/_6sdp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/notification"
-                            android:contentDescription="@string/notification" />
+                                <ImageView
+                                    android:layout_width="@dimen/_30sdp"
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:layout_centerVertical="true"
+                                    android:background="@drawable/back_btn"
+                                    android:padding="@dimen/_6sdp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/notification"
+                                    android:contentDescription="@string/notification" />
 
-                    </RelativeLayout>
+                            </RelativeLayout>
 
-                    <ImageView
-                        android:id="@+id/logout"
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="@dimen/_30sdp"
-                        android:background="@drawable/back_btn"
-                        android:padding="@dimen/_6sdp"
-                        android:src="@drawable/ic_logout"
-                        android:layout_margin="@dimen/_8sdp"
-                        android:contentDescription="@string/notification" />
+                            <ImageView
+                                android:id="@+id/logout"
+                                android:layout_width="@dimen/_30sdp"
+                                android:layout_height="@dimen/_30sdp"
+                                android:background="@drawable/back_btn"
+                                android:padding="@dimen/_6sdp"
+                                android:src="@drawable/ic_logout"
+                                android:layout_margin="@dimen/_8sdp"
+                                android:contentDescription="@string/notification" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/wallet"
+                                android:layout_width="@dimen/_30sdp"
+                                android:layout_height="@dimen/_30sdp"
+                                android:background="@drawable/back_btn"
+                                android:padding="@dimen/_6sdp"
+                                android:src="@drawable/wallet2"
+                                android:layout_margin="@dimen/_8sdp"
+                                android:contentDescription="@string/notification" />
+
+                            <ImageView
+                                android:id="@+id/about"
+                                android:layout_width="@dimen/_30sdp"
+                                android:layout_height="@dimen/_30sdp"
+                                android:background="@drawable/back_btn"
+                                android:padding="@dimen/_6sdp"
+                                android:src="@drawable/about"
+                                android:layout_margin="@dimen/_8sdp"
+                                android:contentDescription="@string/notification" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

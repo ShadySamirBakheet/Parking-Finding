@@ -8,6 +8,7 @@ data class User(
     var email: String? = null,
     var phone: String? = null,
     var isAdmin: Boolean? = null,
+    var wallet: Int? = null,
 ) {
     constructor(shared: SharedPreferences) : this(
         id = shared.getString("id", ""),

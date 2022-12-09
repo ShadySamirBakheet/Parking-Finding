@@ -26,11 +26,13 @@ class MainActivity : AppCompatActivity() {
         binding.loginUser.setOnClickListener {
             Constants.isAdmin= false
             startActivity(Intent(this, SignInActivity::class.java))
+            finish()
         }
 
         binding.loginAdmin.setOnClickListener {
             Constants.isAdmin= true
             startActivity(Intent(this, SignInActivity::class.java))
+            finish()
         }
 
     }

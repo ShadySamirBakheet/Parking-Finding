@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/_50sdp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/_50sdp"
+            android:paddingHorizontal="@dimen/_20sdp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Charge the wallet"
+                android:gravity="center"
+                android:textColor="@color/txtColor1"
+                android:textSize="@dimen/_20ssp"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/wallet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_16sdp"
+                android:layout_marginVertical="@dimen/_8sdp"
+                android:background="@drawable/input1"
+                android:hint="XXX   KWD"
+                android:inputType="number"
+                android:padding="@dimen/_12sdp"
+                android:textColor="@color/txtColor2"
+                android:textColorHighlight="@color/txtColor2"
+                android:textColorHint="@color/txtColor2"
+                android:textSize="@dimen/_14ssp" />
+
+            <TextView
+                android:id="@+id/charge"
+                style="@style/btnStyleHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:text="Charge"
+                android:layout_marginHorizontal="@dimen/_16sdp"
+                android:layout_marginVertical="@dimen/_8sdp"
+                android:textSize="@dimen/_20ssp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
