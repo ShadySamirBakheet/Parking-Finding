@@ -67,16 +67,17 @@ class PurchaseActivity : AppCompatActivity() {
             finish()
         }
         binding.confirm.setOnClickListener {
-            if ( binding.wallet.isChecked) {
-                Log.d("Tag","is wallet")
-                if (Constants.user != null){
-                    Constants.user?.wallet =( (Constants.user?.wallet ?: 0).toDouble() - priceAll).toInt()
+            if (binding.wallet.isChecked) {
+                Log.d("Tag", "is wallet")
+                if (Constants.user != null) {
+                    Constants.user?.wallet =
+                        ((Constants.user?.wallet ?: 0).toDouble() - priceAll).toInt()
                     userViewModel.setUserData(Constants.user!!)
-                    Log.d("Tag","is wallet ${Constants.user}")
+                    Log.d("Tag", "is wallet ${Constants.user}")
 
                 }
             }
-            Log.d("Tag","is wallet out conq")
+            Log.d("Tag", "is wallet out conq")
 
             startActivity(Intent(this, HomeActivity::class.java))
             finish()
