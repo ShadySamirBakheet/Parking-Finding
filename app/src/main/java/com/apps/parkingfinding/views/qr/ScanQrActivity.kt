@@ -300,9 +300,6 @@ class ScanQrActivity : AppCompatActivity() {
                         }
                         // finish()
                     }
-                } else {
-                    Toast.makeText(this@ScanQrActivity, "value- else", Toast.LENGTH_SHORT).show()
-
                 }
             }
         })
